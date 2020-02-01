@@ -72,9 +72,9 @@ D-PAD =
 
 __Joysticks:__
 
-Left Joystick = Left side Forwards/Backwards
+Left Joystick = 
 
-Right Joystick = Right side Forwards/Backwards
+Right Joystick = 
 
 
 __Bumpers and Triggers:__
