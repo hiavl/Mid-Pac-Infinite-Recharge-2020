@@ -1,9 +1,10 @@
 # Mid-Pac-Infinite-Recharge-2020
 
-Robot Code for Mid-Pacific Institute's 2020 FRC robot, <name TBD>
+Robot Code for Mid-Pacific Institute's 2020 FRC robot, (name TBD)
 
 **Controls:**
 (Uses two Xbox Controllers)
+
 (Tank Drive)
 
 **FOR CLEAR CONTROLLER (MAIN CONTROLLER)**
