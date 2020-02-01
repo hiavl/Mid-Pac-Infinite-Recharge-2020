@@ -6,7 +6,7 @@ Robot Code for Mid-Pacific Institute's 2020 FRC robot, <name TBD>
 (Uses two Xbox Controllers)
 (Tank Drive)
 
-**Clear Controller:**
+**FOR CLEAR CONTROLLER (MAIN CONTROLLER)**
 
 __Colored Button Cluster:__
 
@@ -47,7 +47,7 @@ Left Trigger =
 
 ------------------------------------------------------------------------
 
-**Black Controller:**
+**FOR BLACK CONTROLLER (SECONDARY CONTROLLER)**
 
 __Colored Button Cluster__
 
