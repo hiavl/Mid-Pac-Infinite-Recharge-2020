@@ -32,32 +32,21 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private final PWMVictorSPX frontleft = new PWMVictorSPX(0);
-  private final PWMVictorSPX rearleft = new PWMVictorSPX(1);
-  private final SpeedControllerGroup leftDrive = new SpeedControllerGroup(rearleft, frontleft);
+  private final PWMVictorSPX leftDrive = new PWMVictorSPX(1);
+  private final PWMVictorSPX rightDrive = new PWMVictorSPX(2);
 
-  private final PWMVictorSPX frontright = new PWMVictorSPX(2);
-  private final PWMVictorSPX rearright = new PWMVictorSPX(3);
-  private final SpeedControllerGroup rightDrive = new SpeedControllerGroup(rearright, frontright);
-
-  private final PWMVictorSPX winchLeft = new PWMVictorSPX(5);
-  private final PWMVictorSPX winchRight = new PWMVictorSPX(6);
-  private final SpeedControllerGroup winchDrive = new SpeedControllerGroup(winchLeft, winchRight);
-
-  private final PWMVictorSPX shooterLeft = new PWMVictorSPX(7);
-  private final PWMVictorSPX shooterRight = new PWMVictorSPX(8);
-  private final SpeedControllerGroup shooterDrive = new SpeedControllerGroup(shooterLeft, shooterRight);
-
-  private final PWMVictorSPX intakeFeed = new PWMVictorSPX(9);
-  private final PWMVictorSPX intakeArm = new PWMVictorSPX(10);
-
-  private final PWMVictorSPX verticalFeed = new PWMVictorSPX(11);
-
-  private final PWMVictorSPX ctrlPanelRoller = new PWMVictorSPX(12);
+  private final PWMVictorSPX winchMotor = new PWMVictorSPX(3);
   
-  private final PWMVictorSPX hangRollerLeft = new PWMVictorSPX(13);
-  private final PWMVictorSPX hangRollerRight = new PWMVictorSPX(14);
-  private final SpeedControllerGroup hangRoller = new SpeedControllerGroup(hangRollerLeft, hangRollerRight);
+  private final PWMVictorSPX shooterMotor = new PWMVictorSPX(4);
+
+  private final PWMVictorSPX intakeFeed = new PWMVictorSPX(5);
+  private final PWMVictorSPX intakeArm = new PWMVictorSPX(6);
+
+  private final PWMVictorSPX verticalFeed = new PWMVictorSPX(7);
+
+  private final PWMVictorSPX ctrlPanelRoller = new PWMVictorSPX(8);
+  
+  private final PWMVictorSPX hangRoller = new PWMVictorSPX(9);
 
   private final DifferentialDrive robotDrive = new DifferentialDrive(leftDrive, rightDrive);
 
@@ -173,7 +162,14 @@ public class Robot extends TimedRobot {
     if(clearController.getStartButton()) {
     }
 
-    
+    if(clearController.getBumper(Hand.kLeft)) {
+
+    }
+    if(clearController.getBumper(Hand.kRight)) {
+
+    }
+
+
     if(blackController.getAButton()) {
 
     }
@@ -193,6 +189,12 @@ public class Robot extends TimedRobot {
     }
 
     if(blackController.getStartButton()) {
+
+    }
+    if(blackController.getBumper(Hand.kLeft)) {
+
+    }
+    if(blackController.getBumper(Hand.kRight)) {
 
     }
   }
