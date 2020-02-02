@@ -11,21 +11,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.MotorSafety;
-import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -161,33 +153,47 @@ public class Robot extends TimedRobot {
     Timer.delay(0.005);
 
     if(clearController.getAButton()) {
+
     }
     if(clearController.getBButton()) {
+
     }
     if(clearController.getXButton()) {
+
     }
     if(clearController.getYButton()) {
+
     }
     if(clearController.getAButton()) {
+
     }
     if(clearController.getBackButton()) {
     }
+
     if(clearController.getStartButton()) {
     }
 
+    
     if(blackController.getAButton()) {
+
     }
     if(blackController.getBButton()) {
     }
+
     if(blackController.getXButton()) {
+
     }
     if(blackController.getYButton()) {
+
     }
     if(blackController.getAButton()) {
+
     }
     if(blackController.getBackButton()) {
     }
+
     if(blackController.getStartButton()) {
+
     }
   }
 
