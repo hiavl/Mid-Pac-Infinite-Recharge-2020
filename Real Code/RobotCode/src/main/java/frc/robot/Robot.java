@@ -7,16 +7,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.cscore.UsbCamera;
 
 /**
@@ -32,26 +33,39 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private final PWMVictorSPX leftDrive = new PWMVictorSPX(1);
-  private final PWMVictorSPX rightDrive = new PWMVictorSPX(2);
+  // Sets up left and right drive motors
+  private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(1);
+  private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(2);
 
+  // Sets up winch motor
   private final PWMVictorSPX winchMotor = new PWMVictorSPX(3);
-  
+
+  // Sets up shooter motor
   private final PWMVictorSPX shooterMotor = new PWMVictorSPX(4);
 
+  // Sets up intake feed & intake arm motor
   private final PWMVictorSPX intakeFeed = new PWMVictorSPX(5);
   private final PWMVictorSPX intakeArm = new PWMVictorSPX(6);
 
+  // Sets up vertical feed motor
   private final PWMVictorSPX verticalFeed = new PWMVictorSPX(7);
 
+  // Sets up control panel roller motor
   private final PWMVictorSPX ctrlPanelRoller = new PWMVictorSPX(8);
   
+  // Sets up hang roller motor
   private final PWMVictorSPX hangRoller = new PWMVictorSPX(9);
 
-  private final DifferentialDrive robotDrive = new DifferentialDrive(leftDrive, rightDrive);
+  // Combines left and right drive motor into a single variable (DifferentialDrive)
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
 
+  //Differentiates XboxControllers
   private final XboxController blackController = new XboxController(0);
   private final XboxController clearController = new XboxController(1);
+
+  //Sets up limit switches on winch
+  private final DigitalInput botSwitch = new DigitalInput(0);
+  private final DigitalInput topSwitch = new DigitalInput(1);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -63,12 +77,15 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-//    m_rightDrive.setInverted(false);
-//    m_leftDrive.setInverted(false);
+    // Inverts the 
+    m_leftMotor.setInverted(true);
+    m_rightMotor.setInverted(true);
 
     final UsbCamera usbCam = CameraServer.getInstance().startAutomaticCapture("USB cam", "/dev/video0");
     usbCam.setResolution(320, 240);
     usbCam.setFPS(60);
+
+//    winchMotor.setNeutralMode(true);
   }
 
   /**
@@ -100,18 +117,18 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
 
-    robotDrive.setSafetyEnabled(false);
+    m_robotDrive.setSafetyEnabled(false);
 
-    robotDrive.arcadeDrive(-0.5, 0.0);
+    m_robotDrive.arcadeDrive(-0.5, 0.0);
     Timer.delay(2.0);
 
-    robotDrive.arcadeDrive(0.0, 0.0);
+    m_robotDrive.arcadeDrive(0.0, 0.0);
     Timer.delay(2.0);
 
-    robotDrive.arcadeDrive(0.5, 0.0);
+    m_robotDrive.arcadeDrive(0.5, 0.0);
     Timer.delay(2.0);
 
-    robotDrive.arcadeDrive(0.0, 0.0);
+    m_robotDrive.arcadeDrive(0.0, 0.0);
     Timer.delay(2.0);
   }
 
@@ -121,7 +138,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    robotDrive.setSafetyEnabled(false);
+    m_robotDrive.setSafetyEnabled(false);
     
     switch (m_autoSelected) {
       case kCustomAuto:
@@ -138,64 +155,60 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
-    Timer.delay(0.005);
+  //  m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
 
+    
+    // vertical feed 
     if(clearController.getAButton()) {
-
-    }
-    if(clearController.getBButton()) {
-
-    }
-    if(clearController.getXButton()) {
-
-    }
-    if(clearController.getYButton()) {
-
-    }
-    if(clearController.getAButton()) {
-
-    }
-    if(clearController.getBackButton()) {
+      verticalFeed.set(1.0);
+    } else if(clearController.getBButton()) {
+      verticalFeed.set(-1.0);
+    } else {
+      verticalFeed.set(0.0);
     }
 
-    if(clearController.getStartButton()) {
+    // winch motor
+    if((clearController.getYButton() && topSwitch.get())) {
+      winchMotor.set(1.0);
+    } else if(clearController.getXButton() && botSwitch.get()) {
+      winchMotor.set(-1.0);
+    } else {
+      winchMotor.set(0.0);
     }
 
+    // shooter motor (left forward, right backward)
     if(clearController.getBumper(Hand.kLeft)) {
-
+      shooterMotor.set(1.0);
+    } else if(clearController.getBumper(Hand.kRight)) {
+      shooterMotor.set(-1.0);
+    } else {
+      shooterMotor.set(0.0);
     }
-    if(clearController.getBumper(Hand.kRight)) {
 
-    }
-
-
+    // intake arm up and down (A up, B down)
     if(blackController.getAButton()) {
-
+      intakeArm.set(1.0);
+    } else if(blackController.getBButton()) {
+      intakeArm.set(-1.0);
+    } else {
+      intakeArm.set(0.0);
     }
-    if(blackController.getBButton()) {
-    }
 
+    // intake feeder
     if(blackController.getXButton()) {
-
-    }
-    if(blackController.getYButton()) {
-
-    }
-    if(blackController.getAButton()) {
-
-    }
-    if(blackController.getBackButton()) {
+      intakeFeed.set(0.7);
+    } else if(blackController.getYButton()) {
+      intakeFeed.set(-0.7);
+    } else {
+      intakeFeed.set(0.0);
     }
 
-    if(blackController.getStartButton()) {
-
-    }
     if(blackController.getBumper(Hand.kLeft)) {
-
-    }
-    if(blackController.getBumper(Hand.kRight)) {
-
+      ctrlPanelRoller.set(1.0);
+    } else if(blackController.getBumper(Hand.kRight)) {
+      ctrlPanelRoller.set(-1.0);
+    } else {
+      ctrlPanelRoller.set(0.0);
     }
   }
 
