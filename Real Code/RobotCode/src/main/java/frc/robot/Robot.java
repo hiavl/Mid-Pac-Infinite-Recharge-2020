@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-  //  m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
+    m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
 
     
     // vertical feed 
