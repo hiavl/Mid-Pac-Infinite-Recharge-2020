@@ -12,22 +12,22 @@ Robot Code for Mid-Pacific Institute's 2020 FRC robot, (name TBD)
 
 __Colored Button Cluster:__
 
-A = 
+A = Winch Down
 
-B = 
+B = Winch Up
 
-X =
+X = Intake Arm Down
 
-Y =
+Y = Intake Arm Up
 
 
 __Center Buttons:__
 
-BACK =
+BACK = n/a
 
-START =
+START = n/a
 
-D-PAD =
+D-PAD = n/a
 
 
 __Joysticks:__
@@ -39,13 +39,13 @@ Right Joystick = Right side Forwards/Backwards
 
 __Bumpers and Triggers:__
 
-Right Bumper = 
+Right Bumper = Intake Feed Out
 
-Right Trigger =
+Right Trigger = n/a
 
-Left Bumper =
+Left Bumper = Intake Feed In
 
-Left Trigger =
+Left Trigger = n/a
 
 ------------------------------------------------------------------------
 
@@ -53,37 +53,37 @@ Left Trigger =
 
 __Colored Button Cluster__
 
-A = 
+A = Vertical Feed Down
 
-B = 
+B = Vertical Feed Up
 
-X =
+X = Control Panel Roller Left
 
-Y =
+Y = Control Panel Roller Right
 
 
 __Center Buttons:__
 
-BACK =
+BACK = n/a
 
-START =
+START = n/a
 
-D-PAD =
+D-PAD = n/a
 
 
 __Joysticks:__
 
-Left Joystick = 
+Left Joystick = n/a
 
-Right Joystick = 
+Right Joystick = n/a
 
 
 __Bumpers and Triggers:__
 
-Right Bumper = 
+Right Bumper = n/a
 
-Right Trigger =
+Right Trigger = n/a
 
-Left Bumper =
+Left Bumper = Shooter Wheel
 
-Left Trigger =
+Left Trigger = n/a
