@@ -155,62 +155,62 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
+    // drive
     m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
 
     
-    // vertical feed 
-    if(clearController.getAButton()) {
-      verticalFeed.set(1.0);
-    } else if(clearController.getBButton()) {
-      verticalFeed.set(-1.0);
-    } else {
-      verticalFeed.set(0.0);
-    }
-
-    // winch motor
-    if((clearController.getYButton() && topSwitch.get())) {
-      winchMotor.set(1.0);
-    } else if(clearController.getXButton() && botSwitch.get()) {
+    // winch
+    if(clearController.getAButton() && topSwitch.get()) {
       winchMotor.set(-1.0);
+    } else if(clearController.getBButton() && botSwitch.get()) {
+      winchMotor.set(1.0);
     } else {
       winchMotor.set(0.0);
     }
 
-    // shooter motor (left forward, right backward)
-    if(clearController.getBumper(Hand.kLeft)) {
-      shooterMotor.set(1.0);
-    } else if(clearController.getBumper(Hand.kRight)) {
-      shooterMotor.set(-1.0);
-    } else {
-      shooterMotor.set(0.0);
-    }
-
-    // intake arm up and down (A up, B down)
-    if(blackController.getAButton()) {
-      intakeArm.set(1.0);
-    } else if(blackController.getBButton()) {
+    // intake arm
+    if(clearController.getYButton()) {
       intakeArm.set(-1.0);
+    } else if(clearController.getXButton()) {
+      intakeArm.set(1.0);
     } else {
       intakeArm.set(0.0);
     }
 
-    // intake feeder
-    if(blackController.getXButton()) {
-      intakeFeed.set(0.7);
-    } else if(blackController.getYButton()) {
-      intakeFeed.set(-0.7);
+    // intake feed
+    if(clearController.getBumper(Hand.kLeft)) {
+      intakeFeed.set(0.4);
+    } else if(clearController.getBumper(Hand.kRight)) {
+      intakeFeed.set(-0.4);
     } else {
       intakeFeed.set(0.0);
     }
 
-    if(blackController.getBumper(Hand.kLeft)) {
-      ctrlPanelRoller.set(1.0);
-    } else if(blackController.getBumper(Hand.kRight)) {
+    // vertical feed
+    if(blackController.getAButton()) {
+      verticalFeed.set(-1.0);
+    } else if(blackController.getBButton()) {
+      verticalFeed.set(1.0);
+    } else {
+      verticalFeed.set(0.0);
+    }
+
+    // control panel roller
+    if(blackController.getXButton()) {
       ctrlPanelRoller.set(-1.0);
+    } else if(blackController.getYButton()) {
+      ctrlPanelRoller.set(1.0);
     } else {
       ctrlPanelRoller.set(0.0);
     }
-  }
+
+    // shooter
+    if(blackController.getBumper(Hand.kLeft)) {
+      shooterMotor.set(1.0);
+    } else {
+      shooterMotor.set(0.0);
+    }
 
   /**
    * This function is called periodically during test mode.
