@@ -52,9 +52,6 @@ public class Robot extends TimedRobot {
 
   // Sets up control panel roller motor
   private final PWMVictorSPX ctrlPanelRoller = new PWMVictorSPX(8);
-  
-  // Sets up hang roller motor
-  private final PWMVictorSPX hangRoller = new PWMVictorSPX(9);
 
   // Combines left and right drive motor into a single variable (DifferentialDrive)
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
