@@ -211,7 +211,8 @@ public class Robot extends TimedRobot {
     } else {
       shooterMotor.set(0.0);
     }
-
+  }
+  
   /**
    * This function is called periodically during test mode.
    */
