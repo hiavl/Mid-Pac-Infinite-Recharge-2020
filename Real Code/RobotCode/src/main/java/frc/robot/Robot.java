@@ -57,12 +57,18 @@ public class Robot extends TimedRobot {
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
 
   //Differentiates XboxControllers
-  private final XboxController blackController = new XboxController(0);
-  private final XboxController clearController = new XboxController(1);
+  private final XboxController clearController = new XboxController(0);
+  private final XboxController blackController = new XboxController(1);
 
   //Sets up limit switches on winch
   private final DigitalInput botSwitch = new DigitalInput(0);
   private final DigitalInput topSwitch = new DigitalInput(1);
+
+  //Sets up autonomous switches
+  private final DigitalInput autoOne = new DigitalInput(6);
+  private final DigitalInput autoTwo = new DigitalInput(7);
+  private final DigitalInput autoThree = new DigitalInput(8);
+  private final DigitalInput autoFour = new DigitalInput(9);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -116,17 +122,77 @@ public class Robot extends TimedRobot {
 
     m_robotDrive.setSafetyEnabled(false);
 
-    m_robotDrive.arcadeDrive(-0.5, 0.0);
-    Timer.delay(2.0);
+    if(!autoOne.get()) { //first auto
+      
+      shooterMotor.set(1.0);
+      Timer.delay(2.0);
+      verticalFeed.set(1.0);
+      Timer.delay(5.0);
+      shooterMotor.set(0.0);
+      verticalFeed.set(0.0);
+      Timer.delay(0.5);
 
-    m_robotDrive.arcadeDrive(0.0, 0.0);
-    Timer.delay(2.0);
+      m_robotDrive.tankDrive(-0.5, 0.5);
+      Timer.delay(1.0);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(1.0);
 
-    m_robotDrive.arcadeDrive(0.5, 0.0);
-    Timer.delay(2.0);
+      m_robotDrive.tankDrive(0.5, 0.5);
+      Timer.delay(4.0);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(0.5);
 
-    m_robotDrive.arcadeDrive(0.0, 0.0);
-    Timer.delay(2.0);
+    } else if(!autoTwo.get()) { //second auto
+      
+      shooterMotor.set(1.0);
+      Timer.delay(2.0);
+      verticalFeed.set(1.0);
+      Timer.delay(5.0);
+      shooterMotor.set(0.0);
+      verticalFeed.set(0.0);
+      Timer.delay(0.5);
+
+      m_robotDrive.tankDrive(0.5, 0.5);
+      Timer.delay(4.0);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(0.5);
+
+    } else if(!autoThree.get()) {
+      m_robotDrive.tankDrive(-0.5, -0.5);
+      Timer.delay(1.0);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(1.0);
+
+      m_robotDrive.tankDrive(-0.5, 0.5);
+      Timer.delay(0.8);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(1.0);
+
+      shooterMotor.set(1.0);
+      Timer.delay(2.0);
+      verticalFeed.set(1.0);
+      Timer.delay(5.0);
+      shooterMotor.set(0.0);
+      verticalFeed.set(0.0);
+      Timer.delay(0.5);
+
+      m_robotDrive.tankDrive(0.5, -0.5);
+      Timer.delay(0.9);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(1.0);
+
+      m_robotDrive.tankDrive(0.5, 0.5);
+      Timer.delay(6.0);
+      m_robotDrive.tankDrive(0.0, 0.0);
+      Timer.delay(0.5);
+
+    } else if(!autoFour.get()) {
+
+    } else { //if we don't want to shoot
+      m_robotDrive.tankDrive(0.5, 0.5);
+      Timer.delay(5.0);
+    }
+
   }
 
   /**
@@ -152,7 +218,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    
+
     // drive
     m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
 
@@ -177,9 +243,9 @@ public class Robot extends TimedRobot {
 
     // intake feed
     if(clearController.getBumper(Hand.kLeft)) {
-      intakeFeed.set(0.4);
+      intakeFeed.set(0.6);
     } else if(clearController.getBumper(Hand.kRight)) {
-      intakeFeed.set(-0.4);
+      intakeFeed.set(-0.6);
     } else {
       intakeFeed.set(0.0);
     }
@@ -209,7 +275,6 @@ public class Robot extends TimedRobot {
       shooterMotor.set(0.0);
     }
   }
-  
   /**
    * This function is called periodically during test mode.
    */
