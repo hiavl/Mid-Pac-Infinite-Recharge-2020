@@ -18,6 +18,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+// new imports
+import java.util.TimerTask;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.I2C.Port;
+
+import frc.robot.pulsedLightLIDAR;
 import edu.wpi.cscore.UsbCamera;
 
 /**
@@ -69,6 +76,7 @@ public class Robot extends TimedRobot {
   private final DigitalInput autoTwo = new DigitalInput(7);
   private final DigitalInput autoThree = new DigitalInput(8);
   private final DigitalInput autoFour = new DigitalInput(9);
+  private pulsedLightLIDAR lidar = new pulsedLightLIDAR();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -79,14 +87,20 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-
-    // Inverts the 
+   
+    // Inverts the left and right Motors
     m_leftMotor.setInverted(true);
     m_rightMotor.setInverted(true);
 
     final UsbCamera usbCam = CameraServer.getInstance().startAutomaticCapture("USB cam", "/dev/video0");
     usbCam.setResolution(320, 240);
     usbCam.setFPS(60);
+
+    //Check the readings for distances in Inches.
+    lidar.start();
+    //SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
+    System.out.println(lidar.getDistance());
+    
 
 //    winchMotor.setNeutralMode(true);
   }
@@ -122,7 +136,7 @@ public class Robot extends TimedRobot {
 
     m_robotDrive.setSafetyEnabled(false);
 
-    if(!autoOne.get()) { //first auto
+    if(!autoOne.get()) { // first auto (right side)
       
       shooterMotor.set(1.0);
       Timer.delay(2.0);
@@ -142,7 +156,7 @@ public class Robot extends TimedRobot {
       m_robotDrive.tankDrive(0.0, 0.0);
       Timer.delay(0.5);
 
-    } else if(!autoTwo.get()) { //second auto
+    } else if(!autoTwo.get()) { // second auto (middle)
       
       shooterMotor.set(1.0);
       Timer.delay(2.0);
@@ -157,7 +171,8 @@ public class Robot extends TimedRobot {
       m_robotDrive.tankDrive(0.0, 0.0);
       Timer.delay(0.5);
 
-    } else if(!autoThree.get()) {
+    } else if(!autoThree.get()) { // third auto (left side, needs work)
+
       m_robotDrive.tankDrive(-0.5, -0.5);
       Timer.delay(1.0);
       m_robotDrive.tankDrive(0.0, 0.0);
@@ -186,7 +201,7 @@ public class Robot extends TimedRobot {
       m_robotDrive.tankDrive(0.0, 0.0);
       Timer.delay(0.5);
 
-    } else if(!autoFour.get()) {
+    } else if(!autoFour.get()) { // flex auto
 
     } else { //if we don't want to shoot
       m_robotDrive.tankDrive(0.5, 0.5);
@@ -220,10 +235,14 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     // drive
-    m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
-
-    
-    // winch
+  //  m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
+    SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
+    System.out.println(lidar.getDistance());
+    System.out.println("Data:");
+    System.out.println(lidar.distance);
+    System.out.println(lidar.receiveHigh());
+    System.out.println(lidar.receiveLow());
+    // winch (A down, B up)
     if(clearController.getAButton() && topSwitch.get()) {
       winchMotor.set(-1.0);
     } else if(clearController.getBButton() && botSwitch.get()) {
@@ -232,7 +251,7 @@ public class Robot extends TimedRobot {
       winchMotor.set(0.0);
     }
 
-    // intake arm
+    // intake arm (X down, Y up)
     if(clearController.getYButton()) {
       intakeArm.set(-1.0);
     } else if(clearController.getXButton()) {
@@ -241,7 +260,7 @@ public class Robot extends TimedRobot {
       intakeArm.set(0.0);
     }
 
-    // intake feed
+    // intake feed (left bumper out, right bumper in)
     if(clearController.getBumper(Hand.kLeft)) {
       intakeFeed.set(0.6);
     } else if(clearController.getBumper(Hand.kRight)) {
@@ -250,7 +269,7 @@ public class Robot extends TimedRobot {
       intakeFeed.set(0.0);
     }
 
-    // vertical feed
+    // vertical feed (A down, B up)
     if(blackController.getAButton()) {
       verticalFeed.set(-1.0);
     } else if(blackController.getBButton()) {
@@ -259,7 +278,7 @@ public class Robot extends TimedRobot {
       verticalFeed.set(0.0);
     }
 
-    // control panel roller
+    // control panel roller (X left, Y right)
     if(blackController.getXButton()) {
       ctrlPanelRoller.set(-1.0);
     } else if(blackController.getYButton()) {
@@ -268,12 +287,14 @@ public class Robot extends TimedRobot {
       ctrlPanelRoller.set(0.0);
     }
 
-    // shooter
+    // shooter (left bumper)
     if(blackController.getBumper(Hand.kLeft)) {
       shooterMotor.set(1.0);
     } else {
       shooterMotor.set(0.0);
     }
+
+    
   }
   /**
    * This function is called periodically during test mode.
