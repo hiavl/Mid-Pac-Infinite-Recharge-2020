@@ -19,12 +19,12 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 // new imports
-import java.util.TimerTask;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.I2C.Port;
+//import java.util.TimerTask;
+//import edu.wpi.first.wpilibj.I2C;
+//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.I2C.Port;
 
-import frc.robot.pulsedLightLIDAR;
+//import frc.robot.pulsedLightLIDAR;
 import edu.wpi.cscore.UsbCamera;
 
 /**
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
   private final DigitalInput autoTwo = new DigitalInput(7);
   private final DigitalInput autoThree = new DigitalInput(8);
   private final DigitalInput autoFour = new DigitalInput(9);
-  private pulsedLightLIDAR lidar = new pulsedLightLIDAR();
+  //private pulsedLightLIDAR lidar = new pulsedLightLIDAR();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -96,13 +96,13 @@ public class Robot extends TimedRobot {
     usbCam.setResolution(320, 240);
     usbCam.setFPS(60);
 
-    //Check the readings for distances in Inches.
-    lidar.start();
-    //SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
-    System.out.println(lidar.getDistance());
+    // Check the readings for distances in Inches.
+    // lidar.startMeasuring();
+    // SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
+    // System.out.println(lidar.getDistance());
     
 
-//    winchMotor.setNeutralMode(true);
+    // winchMotor.setNeutralMode(true);
   }
 
   /**
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
 
     m_robotDrive.setSafetyEnabled(false);
@@ -235,17 +235,19 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     // drive
-  //  m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
-    SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
-    System.out.println(lidar.getDistance());
-    System.out.println("Data:");
-    System.out.println(lidar.distance);
-    System.out.println(lidar.receiveHigh());
-    System.out.println(lidar.receiveLow());
+    m_robotDrive.tankDrive(clearController.getY(Hand.kLeft), clearController.getY(Hand.kRight));
+    // SmartDashboard.putNumber("Lidar Detection Range:", lidar.getDistanceIn());
+    // System.out.println(lidar.getDistanceIn());
+    // System.out.println("Data:");
+    // System.out.println(lidar.distance);
+    // System.out.println(lidar.receiveHigh());
+    // System.out.println(lidar.receiveLow());
+
+
     // winch (A down, B up)
-    if(clearController.getAButton() && topSwitch.get()) {
+    if(clearController.getBButton() && topSwitch.get()) {
       winchMotor.set(-1.0);
-    } else if(clearController.getBButton() && botSwitch.get()) {
+    } else if(clearController.getAButton() && botSwitch.get()) {
       winchMotor.set(1.0);
     } else {
       winchMotor.set(0.0);
@@ -262,9 +264,9 @@ public class Robot extends TimedRobot {
 
     // intake feed (left bumper out, right bumper in)
     if(clearController.getBumper(Hand.kLeft)) {
-      intakeFeed.set(0.6);
+      intakeFeed.set(0.5);
     } else if(clearController.getBumper(Hand.kRight)) {
-      intakeFeed.set(-0.6);
+      intakeFeed.set(-0.5);
     } else {
       intakeFeed.set(0.0);
     }
